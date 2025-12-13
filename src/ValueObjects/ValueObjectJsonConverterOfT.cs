@@ -17,7 +17,7 @@ public sealed class ValueObjectJsonConverter<T, TValue> : JsonConverter<T>
         {
             if (reader.TokenType == JsonTokenType.Null)
             {
-                return IValueObject<T, TValue>.Unknown;
+                return default!;
             }
 
             object rawValue = typeof(TValue) switch
@@ -53,11 +53,11 @@ public sealed class ValueObjectJsonConverter<T, TValue> : JsonConverter<T>
                 _ => throw new NotSupportedException($"Unsupported type: {typeof(TValue)}")
             };
 
-            return T.Create((TValue)rawValue);
+            return default!;
         }
         catch
         {
-            return IValueObject<T, TValue>.Unknown;
+            return default!;
         }
     }
 

@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
+using ValueObjects;
 
 namespace @namespace;
 
@@ -13,6 +14,8 @@ public readonly partial record struct @RawName : IValueObject<@RawName, @Type>
 {
     private readonly @Type _value;
     private static readonly @Behaviour _behaviour = new();
+
+    public static @RawName Empty => new(_behaviour.Empty());
 
     private @RawName(@Type value)
     {
@@ -30,7 +33,7 @@ public readonly partial record struct @RawName : IValueObject<@RawName, @Type>
     {
         if (string.IsNullOrEmpty(s))
         {
-            result = Identifier.Empty;
+            result = @RawName.Empty;
             return true;
         }
         else if (_behaviour.TryParse(s, provider, out var id))
@@ -39,7 +42,7 @@ public readonly partial record struct @RawName : IValueObject<@RawName, @Type>
             return true;
         }
 
-        result = Identifier.Unknown;
+        result = default!;
         return false;
     }
 
@@ -48,9 +51,9 @@ public readonly partial record struct @RawName : IValueObject<@RawName, @Type>
         return _behaviour.ToString(_value, format, formatProvider);
     }
 
-    public static implicit operator Identifier(@Type value)
+    public static implicit operator @RawName(@Type value)
         => Create(value);
 
     [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private string DebuggerDisplay => ToString();
+    private string DebuggerDisplay => _value.ToString();
 }

@@ -36,13 +36,8 @@ public sealed class ValueObjectTypeConverter : TypeConverter
     public ValueObjectTypeConverter(Type type)
     {
         var valueObjectInterface = type.GetInterfaces()
-            .FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IValueObject<,>));
-
-        if (valueObjectInterface is null)
-        {
-            throw new ArgumentException($"Type '{type.FullName}' does not implement IValueObject<,> interface.", nameof(type));
-        }
-
+            .FirstOrDefault(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IValueObject<,>))
+            ?? throw new ArgumentException($"Type '{type.FullName}' does not implement IValueObject<,> interface.", nameof(type));
         var converterType = typeof(ValueObjectTypeConverter<,>).MakeGenericType(valueObjectInterface.GenericTypeArguments);
         _converter = (TypeConverter)Activator.CreateInstance(converterType)!;
     }

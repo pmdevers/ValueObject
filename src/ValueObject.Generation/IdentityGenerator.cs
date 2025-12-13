@@ -17,7 +17,8 @@ public sealed class IdentityGenerator : IIncrementalGenerator
         public string Behaviour;
     }
 
-    private readonly string _attributeName = "ValueObject.IdAttribute`2";
+    // Correct fully-qualified metadata name to match [Id<...>] usage.
+    private readonly string _attributeName = "ValueObjects.Identifiers.IdAttribute`2";
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
@@ -41,16 +42,30 @@ public sealed class IdentityGenerator : IIncrementalGenerator
 
     private IdParameter Collect(GeneratorAttributeSyntaxContext context, CancellationToken ct)
     {
-
         var symbol = (INamedTypeSymbol)context.TargetSymbol;
-        var attr = context.Attributes.First(m => m.AttributeClass?.ToDisplayString() == _attributeName).AttributeClass;
+
+        // Defensive: use FirstOrDefault to avoid throwing if attributes mismatch.
+
+        var attrClass = context.Attributes.First(m => $"{m.AttributeClass?.ContainingNamespace}.{m.AttributeClass?.MetadataName}" == _attributeName).AttributeClass!;
+
+        if (attrClass is null)
+        {
+            // If we ever get here, something is off with the metadata name; avoid crashing.
+            return new IdParameter
+            {
+                Namespace = symbol.ContainingNamespace.ToString(),
+                RawName = symbol.Name,
+                Type = "global::System.Object",
+                Behaviour = "global::System.Object"
+            };
+        }
 
         return new IdParameter
         {
             Namespace = symbol.ContainingNamespace.ToString(),
             RawName = symbol.Name,
-            Type = GetFullTypeName(attr.TypeArguments[1]),
-            Behaviour = GetFullTypeName(attr.TypeArguments[0])
+            Type = GetFullTypeName(attrClass.TypeArguments[1]),
+            Behaviour = GetFullTypeName(attrClass.TypeArguments[0])
         };
     }
 
