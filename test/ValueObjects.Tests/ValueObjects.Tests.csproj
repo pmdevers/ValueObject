@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\ValueObject.Generation\ValueObject.Generation.csproj"  OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\..\src\ValueObjects.Generation\ValueObjects.Generation.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     <ProjectReference Include="..\..\src\ValueObjects\ValueObjects.csproj" />
   </ItemGroup>
 

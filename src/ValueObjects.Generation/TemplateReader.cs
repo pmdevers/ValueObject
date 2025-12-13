@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace ValueObject.Generation;
+namespace ValueObjects.Generation;
 
 public static class TemplateReader
 {

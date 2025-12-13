@@ -1,9 +1,9 @@
 <Solution>
   <Folder Name="/src/">
-    <Project Path="src/ValueObject.Generation/ValueObject.Generation.csproj" Id="4c944e01-0c9b-4159-92a1-0c34e60dbd76" />
+    <Project Path="src/ValueObjects.Generation/ValueObjects.Generation.csproj" Id="4c944e01-0c9b-4159-92a1-0c34e60dbd76" />
     <Project Path="src/ValueObjects/ValueObjects.csproj" Id="9ffacf01-4f5c-4207-8fc7-0af5652a75d2" />
   </Folder>
   <Folder Name="/test/">
-    <Project Path="test/ValueObject.Tests/ValueObject.Tests.csproj" Id="9fe59674-af1e-4646-8f15-78632de8339f" />
+    <Project Path="test/ValueObjects.Tests/ValueObjects.Tests.csproj" Id="9fe59674-af1e-4646-8f15-78632de8339f" />
   </Folder>
 </Solution>

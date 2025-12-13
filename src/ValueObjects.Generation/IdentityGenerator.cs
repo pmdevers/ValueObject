@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-namespace ValueObject.Generation;
+namespace ValueObjects.Generation;
 
 [Generator]
 public sealed class IdentityGenerator : IIncrementalGenerator
@@ -13,7 +13,7 @@ public sealed class IdentityGenerator : IIncrementalGenerator
     {
         public string Namespace;
         public string RawName;
-        public string Type;
+        public string Value;
         public string Behaviour;
     }
 
@@ -55,7 +55,7 @@ public sealed class IdentityGenerator : IIncrementalGenerator
             {
                 Namespace = symbol.ContainingNamespace.ToString(),
                 RawName = symbol.Name,
-                Type = "global::System.Object",
+                Value = "global::System.Object",
                 Behaviour = "global::System.Object"
             };
         }
@@ -64,7 +64,7 @@ public sealed class IdentityGenerator : IIncrementalGenerator
         {
             Namespace = symbol.ContainingNamespace.ToString(),
             RawName = symbol.Name,
-            Type = GetFullTypeName(attrClass.TypeArguments[1]),
+            Value = GetFullTypeName(attrClass.TypeArguments[1]),
             Behaviour = GetFullTypeName(attrClass.TypeArguments[0])
         };
     }
@@ -83,9 +83,9 @@ public sealed class IdentityGenerator : IIncrementalGenerator
     {
         var template = TemplateReader.ReadTemplate("Identifier");
         return template
-            .Replace("@namespace", id.Namespace)
-            .Replace("@RawName", id.RawName)
-            .Replace("@Type", id.Type)
-            .Replace("@Behaviour", id.Behaviour);
+            .Replace($"@{nameof(id.Namespace)}", id.Namespace)
+            .Replace($"@{nameof(id.RawName)}", id.RawName)
+            .Replace($"@{nameof(id.Value)}", id.Value)
+            .Replace($"@{nameof(id.Behaviour)}", id.Behaviour);
     }
 }

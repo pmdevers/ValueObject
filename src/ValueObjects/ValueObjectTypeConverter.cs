@@ -16,9 +16,7 @@ internal sealed class ValueObjectTypeConverter<T, TValue> : TypeConverter
             return T.Create(typedValue);
         }
 
-        return T.TryParse(value.ToString(), culture, out var result)
-            ? result
-            : base.ConvertFrom(context, culture, value);
+        return null;
     }
 }
 
