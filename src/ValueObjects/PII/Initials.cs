@@ -8,10 +8,6 @@ public readonly partial record struct Initials :
     IParsable<Initials>
 {
     private const char _dot = '.';
-
-    public static Initials Create(string value)
-        => new(value);
-
     public static Initials Parse(string s, IFormatProvider? provider = null)
         => TryParse(s, provider, out var result) ? result : throw new FormatException();
 
@@ -36,4 +32,10 @@ public readonly partial record struct Initials :
         var initials = string.Join("", names.Split(' ').Select(s => s.First()));
         return TryParse(initials, null, out var results) ? results : Empty;
     }
+
+    public static bool IsValid(string value)
+        => !string.IsNullOrEmpty(value)
+           && value.All(c => char.IsUpper(c) || c == _dot)
+           && value.EndsWith(_dot)
+           && value.Split(_dot, StringSplitOptions.RemoveEmptyEntries).All(s => s.Length == 1);
 }

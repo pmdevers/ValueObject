@@ -1,6 +1,11 @@
-﻿using ValueObjects.Identifiers;
+﻿using ValueObjects;
 
 namespace ValueObject.Tests;
 
-[Id<GuidIdBehaviour, Guid>]
-public partial record struct TestId { }
+public partial record struct TestId : IValueObject<TestId, Guid>
+{
+    public static TestId Next()
+        => new(Guid.NewGuid());
+    public static bool IsValid(Guid value)
+        => true;
+}

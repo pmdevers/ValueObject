@@ -24,6 +24,11 @@ public readonly partial record struct @RawName
         _value = value;
     }
 
+    public static @RawName Create(@Value value)
+        => IsValid(value) 
+        ? new @RawName(value) 
+        : throw new ArgumentException("Invalid identifier type.", nameof(value));
+
     public static @Value ToValue(@RawName self)
         => self._value;
 

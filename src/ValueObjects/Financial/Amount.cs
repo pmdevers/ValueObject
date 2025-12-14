@@ -1,33 +1,106 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
+﻿using System.Numerics;
 
 namespace ValueObjects.Financial;
 
 public partial record struct Amount :
     IValueObject<Amount, decimal>,
-    IParsable<Amount>
+    IIncrementOperators<Amount>,
+    IDecrementOperators<Amount>,
+    IUnaryPlusOperators<Amount, Amount>,
+    IUnaryNegationOperators<Amount, Amount>,
+    IAdditionOperators<Amount, Amount, Amount>,
+    ISubtractionOperators<Amount, Amount, Amount>,
+    IMultiplyOperators<Amount, decimal, Amount>,
+    IMultiplyOperators<Amount, int, Amount>,
+    IMultiplyOperators<Amount, double, Amount>,
+    IDivisionOperators<Amount, decimal, Amount>,
+    IDivisionOperators<Amount, double, Amount>,
+    IDivisionOperators<Amount, int, Amount>,
+    IMultiplyOperators<Amount, Percentage, Amount>,
+    IDivisionOperators<Amount, Percentage, Amount>
+//IAdditionOperators<Amount, Currency, Money>,
+
 {
-    public static Amount Create(decimal value)
-        => new(value);
+    /// <inheritdoc />
+    public static Amount operator +(Amount value)
+        => Create(+value._value);
 
-    public static Amount Parse(string s, IFormatProvider? provider = null)
-        => TryParse(s, provider, out var result) ? result : throw new FormatException();
+    /// <inheritdoc />
+    public static Amount operator -(Amount value)
+       => Create(-value._value);
 
-    public static bool TryParse([NotNullWhen(true)] string? s, IFormatProvider? provider, [MaybeNullWhen(false)] out Amount result)
-    {
-        if (string.IsNullOrEmpty(s))
-        {
-            result = Empty;
-            return true;
-        }
+    /// <inheritdoc />
+    public static Amount operator +(Amount left, Amount right)
+        => Create(left._value + right._value);
 
-        if (decimal.TryParse(s, NumberStyles.Any, provider, out decimal value))
-        {
-            result = Create(value);
-            return true;
-        }
+    /// <inheritdoc />
+    public static Amount operator -(Amount left, Amount right)
+        => Create(left._value - right._value);
 
-        result = default;
-        return false;
-    }
+    /// <inheritdoc />
+    public static Amount operator ++(Amount value)
+        => Create(value._value + 1);
+
+    /// <inheritdoc />
+    public static Amount operator --(Amount value)
+        => Create(value._value - 1);
+
+    /// <inheritdoc />
+    public static Amount operator *(Amount left, decimal right)
+        => Create(left._value * right);
+
+    /// <inheritdoc />
+    public static Amount operator /(Amount left, decimal right)
+        => Create(left._value / right);
+
+    /// <inheritdoc />
+    public static bool operator >(Amount left, Amount right)
+        => left._value > right._value;
+
+    /// <inheritdoc />
+    public static bool operator >=(Amount left, Amount right)
+        => right._value >= left._value;
+
+    /// <inheritdoc />
+    public static bool operator <(Amount left, Amount right)
+        => left._value < right._value;
+
+    /// <inheritdoc />
+    public static bool operator <=(Amount left, Amount right)
+        => left._value <= right._value;
+
+    /// <inheritdoc />
+    public static Amount operator %(Amount left, decimal right)
+        => Create(left._value % right);
+
+    /// <inheritdoc />
+    public static Amount operator *(Amount left, double right)
+        => Create(left._value * (decimal)right);
+
+    /// <inheritdoc />
+    public static Amount operator /(Amount left, double right)
+        => Create(left._value / (decimal)right);
+
+    /// <inheritdoc />
+    public static Amount operator *(Amount left, int right)
+        => Create(left._value * right);
+
+    /// <inheritdoc />
+    public static Amount operator /(Amount left, int right)
+        => Create(left._value / right);
+
+
+    /// <inheritdoc />
+    public static Amount operator *(Amount left, Percentage right)
+        => new(left._value * (decimal)right);
+
+    /// <inheritdoc />
+    public static Amount operator /(Amount left, Percentage right)
+        => Create(left._value / (decimal)right);
+
+    public static bool IsValid(decimal value) => true;
+
+    ///// <inheritdoc />
+    //public static Money operator +(Amount left, Currency right)
+    //    => Create(right, left);
 }

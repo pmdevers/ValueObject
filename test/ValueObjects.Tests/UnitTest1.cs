@@ -24,12 +24,13 @@ public class ValueObject_Tests
         [Fact]
         public void Should_Serialize_Decimal_Value()
         {
-            var result = Amount.Parse("100.000");
-
-            var obj = 100_000m; //Amount.Create(100_000);
+            var obj = 100_000m;
             var json = JsonSerializer.Serialize(obj);
             var deserializedObj = JsonSerializer.Deserialize<Amount>(json);
             Assert.Equal(obj, deserializedObj);
+
+
+            var test = ++deserializedObj;
         }
     }
 }
@@ -40,6 +41,6 @@ public partial record struct UserId : IValueObject<UserId, Guid>
     public static UserId Next()
         => new(Guid.NewGuid());
 
-    public static UserId Create(Guid value)
-        => new(value);
+    public static bool IsValid(Guid value)
+        => true;
 }
