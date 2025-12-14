@@ -15,7 +15,7 @@ public class Percentage_Test
     public void Parse_ShouldParseValidPercentageStrings(string percentage, string expected)
     {
         var culture = CultureInfo.GetCultureInfo("nl-NL");
-        var result = Percentage.Parse(percentage);
+        var result = Percentage.Parse(percentage, culture);
         var expectedValue = decimal.Parse(expected, culture);
 
         (Percentage.ToValue(result) == expectedValue).Should().BeTrue();

@@ -13,8 +13,6 @@ public readonly partial record struct Percentage :
     IUnaryNegationOperators<Percentage, Percentage>,
     IAdditionOperators<Percentage, Percentage, Percentage>,
     ISubtractionOperators<Percentage, Percentage, Percentage>,
-    IMultiplyOperators<Percentage, Percentage, Percentage>,
-    IDivisionOperators<Percentage, Percentage, Percentage>,
     IDivisionOperators<Percentage, decimal, Percentage>,
     IDivisionOperators<Percentage, int, Percentage>
 {
@@ -28,7 +26,7 @@ public readonly partial record struct Percentage :
 
     public static bool TryParse([NotNullWhen(true)] string? s, IFormatProvider? provider, [MaybeNullWhen(false)] out Percentage result)
     {
-        if (PercentageParser.TryParse(s, out var value))
+        if (PercentageParser.TryParse(s, provider, out var value))
         {
             result = new Percentage(value);
             return true;
@@ -169,12 +167,12 @@ internal static class PercentageParser
     /// <param name="s">The percentage string.</param>
     /// <param name="result">The parsed decimal value.</param>
     /// <returns>true if the string was parsed successfully; otherwise, false.</returns>
-    public static bool TryParse(string s, out decimal result)
+    public static bool TryParse(string s, IFormatProvider? provider, out decimal result)
     {
         result = 0;
         var value = Normalize(s);
 
-        if (decimal.TryParse(value, out var tmp))
+        if (decimal.TryParse(value, provider, out var tmp))
         {
             result = tmp / _procent_factor;
 
