@@ -18,7 +18,7 @@ public class Percentage_Test
         var result = Percentage.Parse(percentage);
         var expectedValue = decimal.Parse(expected, culture);
 
-        (result == expectedValue).Should().BeTrue();
+        (Percentage.ToValue(result) == expectedValue).Should().BeTrue();
     }
 
     [Fact]
