@@ -20,7 +20,7 @@ public readonly partial record struct Percentage :
 {
     public static bool IsValid(decimal value)
     {
-        return value < 0 || value > 1;
+        return value > 0 && value < 1;
     }
 
     public static Percentage Parse(string s, IFormatProvider? provider = null)

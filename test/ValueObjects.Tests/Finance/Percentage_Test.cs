@@ -1,4 +1,5 @@
 ﻿using AwesomeAssertions;
+using System.Globalization;
 using ValueObjects.Financial;
 
 namespace ValueObjects.Tests.Finance;
@@ -21,8 +22,9 @@ public class Percentage_Test
     [Fact]
     public void ToString_ShouldReturnPercentageString()
     {
+        var culture = CultureInfo.GetCultureInfo("nl-NL");
         var percentage = Percentage.Create(0.755m);
-        var result = percentage.ToString();
-        result.Should().Be("75.50%");
+        var result = percentage.ToString(null, culture);
+        result.Should().Be("75,500%");
     }
 }
